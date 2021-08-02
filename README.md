@@ -30,8 +30,8 @@ cargo build --release
 ## Run
 ```shell
 # Development
-cargo run
+cargo run -- 1 2
 
 # Release
-target/release/rust_3x_plus1
+target/release/rust_3x_plus1 1 2
 ```
