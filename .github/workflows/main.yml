@@ -1,0 +1,23 @@
+on: [push]
+
+jobs:
+  unit_test_job:
+    runs-on: ubuntu-latest
+    name: Unit Testing
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Unit test
+        id: unit_test
+        uses: quantifex/rust_devtest@1_54
+      - name: Archive code coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit_test_coverage
+          path: coverage/
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          files: ./coverage/lcov.info # optional
+          flags: unit_test # optional
+          verbose: true
