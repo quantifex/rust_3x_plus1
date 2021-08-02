@@ -8,11 +8,12 @@ pub struct Result {
 
 pub fn start(start: u32, end: u32) -> Receiver<Result> {
     let (tx, rx) = channel::<Result>();
-    thread::spawn(move || {
-        for seed in start..(end+1) {
-            tx.send(calculate_sequences(seed));
-        }
-    });
+    for seed in start..(end+1) {
+        let transmit = tx.clone();
+        thread::spawn(move || {
+            transmit.send(calculate_sequences(seed));
+        });
+    }
     rx
 }
 
