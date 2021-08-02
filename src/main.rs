@@ -1,30 +1,24 @@
+use crate::collatz::*;
+use std::{cmp, env};
+
+mod collatz;
+
 fn main() {
-    println!("Hello, world!");
-}
-
-fn calculate_sequences(start: u32) -> u32 {
-    let mut sequence: u32 = 0;
-    let mut value: u32 = start;
-
-    while value > 1 {
-        if (value % 2) == 1 {
-            value = (3 * value) + 1;
-        } else {
-            value /= 2;
-        }
-        sequence += 1;
+    let args: Vec<String> = env::args().collect();
+    println!("Collatz Brute Force Calculator (v0.1)");
+    if args.len() != 3 {
+        println!("Required input arguments missing.\nPlease provide 2 seed values (start and end)");
+        println!("\t{} start end", args[0]);
+        return;
     }
-    return sequence;
-}
 
-#[test]
-fn test_collatz_10() {
-    let seq10 = calculate_sequences(10);
-    assert_eq!(6, seq10);    
-}
+    let first: u32 = args[1].parse().unwrap();
+    let second: u32 = args[2].parse().unwrap();
+    let start_seed = cmp::min(first, second);
+    let end_seed = cmp::max(first, second);
 
-#[test]
-fn test_collatz_123() {
-    let seq123 = calculate_sequences(123);
-    assert_eq!(46, seq123);    
+    let rx = start(start_seed, end_seed);
+    for result in rx {
+        println!("Seed: {} \tSequences: {}", result.seed, result.sequences);
+    }
 }
